@@ -4,21 +4,25 @@
 <dict>
 	<key>files</key>
 	<dict>
+		<key>Default-568h@2x.png</key>
+		<data>
+		D8STS3mHDv2ya6HKCvP6jrq8eig=
+		</data>
 		<key>PkgInfo</key>
 		<data>
 		n57qDP4tZfLD1rCS43W0B4LQjzE=
 		</data>
 		<key>SMContactsSelector.nib</key>
 		<data>
-		asoMoTkoRjQDdFebCPCBamiJO7M=
+		xAK8MJO6z0IY3XTb8oJSgnrTaHM=
 		</data>
 		<key>checked.png</key>
 		<data>
-		DQLWijS5RFHCFb9qXEv6yw7OUmg=
+		sMDd8e5+Mke2BA9lyLQPHe0ncc8=
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
-		fTgQLSL7QjfveGLFW1bIC7+aNBc=
+		z8nXNm0RBxi10RBOmfIdYsC62Ic=
 		</data>
 		<key>en.lproj/InfoPlist.strings</key>
 		<data>
@@ -26,11 +30,11 @@
 		</data>
 		<key>en.lproj/ViewController.nib</key>
 		<data>
-		JlSmcWusdvat+JSzNGIW7Hxlt1o=
+		ayeiaQFop4xz04OitIIyy6D1lzI=
 		</data>
 		<key>unchecked.png</key>
 		<data>
-		2KaFeclIFIviBbkjM4uLonv+f0M=
+		BiY2YHulgZTllBNrsUfCb123Q6c=
 		</data>
 	</dict>
 	<key>rules</key>

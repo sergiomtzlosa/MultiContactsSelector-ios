@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/sid/Desktop/MultiContactsSelector-ios/MultiContactsSelector/SMContactsSelector/Additions/Address+Additions.m \
-  /Users/sid/Desktop/MultiContactsSelector-ios/MultiContactsSelector/SMContactsSelector/Additions/Address+Additions.h
+  /Users/sid/Projects/MultiContactsSelector-ios/MultiContactsSelector/SMContactsSelector/Additions/Address+Additions.m \
+  /Users/sid/Projects/MultiContactsSelector-ios/MultiContactsSelector/SMContactsSelector/Additions/Address+Additions.h

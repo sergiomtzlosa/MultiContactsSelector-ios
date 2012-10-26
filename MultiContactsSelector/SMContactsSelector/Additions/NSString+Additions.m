@@ -83,7 +83,7 @@
 		{
 			NSDictionary* point = [placemark objectForKey:@"Point"];
 			NSArray* coordinates = [point objectForKey:@"coordinates"];
-			value = [NSString stringWithFormat:@"%.10f,%.10f", [coordinates objectAtIndex:0], [coordinates objectAtIndex:1]];
+			value = [NSString stringWithFormat:@"%.10f,%.10f", [[coordinates objectAtIndex:0] doubleValue], [[coordinates objectAtIndex:1] doubleValue]];
 			break;
 		}
 	}	

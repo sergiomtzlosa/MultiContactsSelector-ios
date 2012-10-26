@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/sid/Desktop/MultiContactsSelector-ios/MultiContactsSelector/main.m \
-  /Users/sid/Desktop/MultiContactsSelector-ios/MultiContactsSelector/AppDelegate.h
+  /Users/sid/Projects/MultiContactsSelector-ios/MultiContactsSelector/main.m \
+  /Users/sid/Projects/MultiContactsSelector-ios/MultiContactsSelector/AppDelegate.h

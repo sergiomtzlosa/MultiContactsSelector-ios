@@ -62,6 +62,7 @@ typedef enum
 
 - (void)dismiss;
 - (void)displayChanges:(BOOL)yesOrNO;
+- (void)loadContacts;
 
 @property (nonatomic, retain) IBOutlet UITableView *table;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *cancelItem;

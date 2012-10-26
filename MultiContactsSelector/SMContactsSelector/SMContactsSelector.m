@@ -281,45 +281,118 @@
         table.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     }
     
-	ABAddressBookRef addressBook = ABAddressBookCreate( );
-	CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople( addressBook );
-	CFIndex nPeople = ABAddressBookGetPersonCount(addressBook);
-	dataArray = [NSMutableArray new];
-	
-	for (int i = 0; i < nPeople; i++)
-	{
-		ABRecordRef person = CFArrayGetValueAtIndex(allPeople, i);
-		ABMultiValueRef property = ABRecordCopyValue(person, (requestData == DATA_CONTACT_TELEPHONE) ? kABPersonPhoneProperty : kABPersonEmailProperty);
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 60000
+    
+    __block SMContactsSelector *controller = self;
+    
+    // Request authorization to Address Book
+    ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, NULL);
+    
+    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined)
+    {
+        ABAddressBookRequestAccessWithCompletion(addressBookRef,
+                                                 ^(bool granted, CFErrorRef error) {
+                                                     if (granted)
+                                                         [controller loadContacts];
+                                                     
+                                                 });
+    }
+    else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized)
+    {
+        // The user has previously given access, add the contact
+        [self loadContacts];
+    }
+    else
+    {
+        NSString *currentLanguage = [[[[NSUserDefaults standardUserDefaults] objectForKey:@"AppleLanguages"] objectAtIndex:0] lowercaseString];
         
-		NSArray *propertyArray = (NSArray *)ABMultiValueCopyArrayOfAllValues(property);
-		CFRelease(property);
+        NSString *msg = @"";
         
-		NSString *objs = @"";
+        if ([currentLanguage isEqualToString:@"es"])
+        {
+            msg = @"No se tiene permiso para obtener los contactos, por favor, actívelo en Preferencias de la privacidad.";
+        }
+        else
+        {
+            msg = @"Unable to get your contacts, enable it on your privacy preferences.";
+        }
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+                                                        message:msg
+                                                       delegate:self
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:@"OK", nil];
+        alert.tag = 457;
+        [alert show];
+        
+        return;
+    }
+    
+#else
+    [self loadContacts];
+#endif
+    
+    selectedRow = [NSMutableArray new];
+	table.editing = NO;
+    table.backgroundColor = [UIColor clearColor];
+
+    
+//	dataArray = [[NSMutableArray alloc] initWithObjects:info, nil];
+//	self.filteredListContent = [NSMutableArray arrayWithCapacity:[data count]];
+//	[self.searchDisplayController.searchBar setShowsCancelButton:NO];
+//	selectedRow = [NSMutableArray new];
+//	table.editing = NO;
+//	[info release];
+//	[self.table reloadData];
+}
+
+- (void)loadContacts
+{
+    NSString *objsAux = @"";
+    ABAddressBookRef addressBook = ABAddressBookCreate( );
+    CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople( addressBook );
+    
+    CFIndex nPeople = ABAddressBookGetPersonCount(addressBook);
+    dataArray = [NSMutableArray new];
+    
+    for (int i = 0; i < nPeople; i++)
+    {
+        ABRecordRef person = CFArrayGetValueAtIndex(allPeople, i);
+        ABMultiValueRef property = ABRecordCopyValue(person, (requestData == DATA_CONTACT_TELEPHONE) ? kABPersonPhoneProperty : kABPersonEmailProperty);
+        
+        NSArray *propertyArray = (NSArray *)ABMultiValueCopyArrayOfAllValues(property);
+        CFRelease(property);
+        
+        NSString *objs = @"";
+        
         BOOL lotsItems = NO;
-		for (int i = 0; i < [propertyArray count]; i++)
-		{
-			if (objs == @"") 
-			{
-				objs = [propertyArray objectAtIndex:i];
-			}
-			else 
-			{
+        for (int i = 0; i < [propertyArray count]; i++)
+        {
+            if (objs == @"")
+            {
+                objs = [propertyArray objectAtIndex:i];
+                objsAux = [objsAux stringByAppendingFormat:@",%@", objs];
+            }
+            else
+            {
                 lotsItems = YES;
-				objs = [objs stringByAppendingString:[NSString stringWithFormat:@",%@", [propertyArray objectAtIndex:i]]];
-			}
-		}
+                objs = [objs stringByAppendingString:[NSString stringWithFormat:@",%@", [propertyArray objectAtIndex:i]]];
+                objsAux = [objsAux stringByAppendingFormat:@",%@", objs];
+            }
+        }
         
-		[propertyArray release];
+        [propertyArray release];
         
-		CFStringRef name;
+        CFStringRef name;
         name = ABRecordCopyValue(person, kABPersonFirstNameProperty);
         CFStringRef lastNameString;
         lastNameString = ABRecordCopyValue(person, kABPersonLastNameProperty);
         CFStringRef emailString;
         emailString = ABRecordCopyValue(person, kABPersonEmailProperty);
         
-		NSString *nameString = (NSString *)name;
-		NSString *lastName = (NSString *)lastNameString;
+        NSString *nameString = (NSString *)name;
+        
+        NSString *lastName = (NSString *)lastNameString;
         int currentID = (int)ABRecordGetRecordID(person);
         
         if ((id)lastNameString != nil)
@@ -333,12 +406,12 @@
         [info setValue:@"-1" forKey:@"rowSelected"];
         
         if ((objs != @"") || ([[objs lowercaseString] rangeOfString:@"null"].location == NSNotFound))
-		{
-            if (requestData == DATA_CONTACT_EMAIL) 
+        {
+            if (requestData == DATA_CONTACT_EMAIL)
             {
                 [info setValue:[NSString stringWithFormat:@"%@", objs] forKey:@"email"];
                 
-                if (!lotsItems) 
+                if (!lotsItems)
                 {
                     [info setValue:[NSString stringWithFormat:@"%@", objs] forKey:@"emailSelected"];
                 }
@@ -352,7 +425,7 @@
             {
                 [info setValue:[NSString stringWithFormat:@"%@", objs] forKey:@"telephone"];
                 
-                if (!lotsItems) 
+                if (!lotsItems)
                 {
                     [info setValue:[NSString stringWithFormat:@"%@", objs] forKey:@"telephoneSelected"];
                 }
@@ -362,15 +435,15 @@
                 }
             }
             
-            if (requestData == DATA_CONTACT_ID) 
+            if (requestData == DATA_CONTACT_ID)
             {
                 [info setValue:[NSString stringWithFormat:@"%d", currentID] forKey:@"recordID"];
                 
                 [info setValue:@"" forKey:@"recordIDSelected"];
             }
-		}
-
-        if ([recordIDs count] > 0) 
+        }
+        
+        if ([recordIDs count] > 0)
         {
             BOOL insert = ([[NSString stringWithFormat:@"%d", currentID] isRecordInArray:recordIDs]);
             
@@ -385,87 +458,125 @@
         [info release];
         if (name) CFRelease(name);
         if (lastNameString) CFRelease(lastNameString);
-	}
-
-	CFRelease(allPeople);
-	CFRelease(addressBook);
-    
-    NSMutableArray *temp = [[NSMutableArray alloc] initWithArray:dataArray];
-    
-    if (temp && [temp count] > 0)
-    {
-        temp = [temp removeNullValues];
     }
     
-    temp = [temp removeDuplicateObjects];
+    CFRelease(allPeople);
+    CFRelease(addressBook);
     
+    NSMutableArray *temp = [[NSMutableArray alloc] initWithArray:[[NSSet setWithArray:dataArray] allObjects]];
+    //        temp = [temp removeNullValues];
+    //        temp = [temp removeDuplicateObjects];
     dataArray = nil;
     dataArray = [NSArray arrayWithArray:temp];
-
-	NSSortDescriptor *sortDescriptor;
-	sortDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"name"
-												  ascending:YES] autorelease];
-	NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-	data = [[dataArray sortedArrayUsingDescriptors:sortDescriptors] retain];
     
+    //        NSSortDescriptor *sortDescriptor;
+    //        sortDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"name"
+    //                                                      ascending:YES] autorelease];
+    //
+    //        NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    //
+    NSSortDescriptor *sorter = [[[NSSortDescriptor alloc] initWithKey:@"name"
+                                                            ascending:YES
+                                                             selector:@selector(localizedStandardCompare:)] autorelease];
+    
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sorter];
+    
+    data = [[dataArray sortedArrayUsingDescriptors:sortDescriptors] retain];
+    
+    NSLog(@"data Not find dup: %@", data);
+   
+    NSMutableArray *dataTemp = [data mutableCopy];
+    
+    for (NSDictionary *item in data)
+    {
+        NSString *str = (NSString *)[item valueForKey:@"telephone"];
+        
+        if ([str containsString:@","])
+        {
+            NSArray *tels = [str componentsSeparatedByString:@","];
+            
+            for (NSString *i in tels)
+            {
+                int count = 0;
+                
+                for (NSDictionary *item in dataTemp)
+                {
+                    NSString *str = (NSString *)[item valueForKey:@"telephone"];
+                    
+                    if ([str containsString:i])
+                        count++;
+                }
+                
+                if (count > 1)
+                    [dataTemp removeObject:item];
+            }
+        }
+    }
+    
+    data = dataTemp;
+    
+    NSLog(@"data find dup: %@", data);
+   
     if (self.savedSearchTerm)
-	{
+    {
         [self.searchDisplayController setActive:self.searchWasActive];
         [self.searchDisplayController.searchBar setSelectedScopeButtonIndex:self.savedScopeButtonIndex];
         [self.searchDisplayController.searchBar setText:savedSearchTerm];
         
         self.savedSearchTerm = nil;
     }
-	
-	self.searchDisplayController.searchResultsTableView.scrollEnabled = YES;
-	self.searchDisplayController.searchBar.showsCancelButton = NO;
-	
-	NSMutableDictionary	*info = [NSMutableDictionary new];
-	for (int i = 0; i < [arrayLetters count]; i++)
-	{
-		NSMutableArray *array = [NSMutableArray new];
-		
-		for (NSDictionary *dict in data)
-		{
-			NSString *name = [dict valueForKey:@"name"];
-			name = [name stringByReplacingOccurrencesOfString:@" " withString:@""];
-			
-			if ([[[name substringToIndex:1] uppercaseString] isEqualToString:[arrayLetters objectAtIndex:i]]) 
-			{
-				[array addObject:dict];
-			}
-		}
-		
-		[info setValue:array forKey:[arrayLetters objectAtIndex:i]];
-		[array release];
-	}
-	
-	for (int i = 0; i < [arrayLetters count]; i++)
-	{
-		NSMutableArray *array = [NSMutableArray new];
-		
-		for (NSDictionary *dict in data)
-		{
-			NSString *name = [dict valueForKey:@"name"];
-			name = [name stringByReplacingOccurrencesOfString:@" " withString:@""];
-			
-			if ((![name isLetter]) && (![name containsNullString]))
-			{
-				[array addObject:dict];
-			}
-		}
-		
-		[info setValue:array forKey:@"#"];
-		[array release];
-	}
     
-	dataArray = [[NSMutableArray alloc] initWithObjects:info, nil];
-	self.filteredListContent = [NSMutableArray arrayWithCapacity:[data count]];
-	[self.searchDisplayController.searchBar setShowsCancelButton:NO];
-	selectedRow = [NSMutableArray new];
-	table.editing = NO;
-	[info release];
-	[self.table reloadData];
+    self.searchDisplayController.searchResultsTableView.scrollEnabled = YES;
+    self.searchDisplayController.searchBar.showsCancelButton = NO;
+    
+    NSMutableDictionary	*info = [NSMutableDictionary new];
+    
+    for (int i = 0; i < [arrayLetters count]; i++)
+    {
+        NSMutableArray *array = [NSMutableArray new];
+        
+        for (NSDictionary *dict in data)
+        {
+            NSString *name = [dict valueForKey:@"name"];
+            name = [name stringByReplacingOccurrencesOfString:@" " withString:@""];
+            
+            if ([[[name substringToIndex:1] uppercaseString] isEqualToString:[arrayLetters objectAtIndex:i]])
+            {
+                [array addObject:dict];
+            }
+        }
+        
+        [info setValue:array forKey:[arrayLetters objectAtIndex:i]];
+        [array release];
+    }
+    
+    for (int i = 0; i < [arrayLetters count]; i++)
+    {
+        NSMutableArray *array = [NSMutableArray new];
+        
+        for (NSDictionary *dict in data)
+        {
+            NSString *name = [dict valueForKey:@"name"];
+            name = [name stringByReplacingOccurrencesOfString:@" " withString:@""];
+            
+            if ((![name isLetter]) && (![name containsNullString]))
+            {
+                [array addObject:dict];
+            }
+        }
+        
+        [info setValue:array forKey:@"#"];
+        [array release];
+    }
+    
+    
+    dataArray = [[NSMutableArray alloc] initWithObjects:info, nil];
+    NSLog(@"%@", info);
+  
+    self.filteredListContent = [NSMutableArray arrayWithCapacity:[data count]];
+    [self.searchDisplayController.searchBar setShowsCancelButton:NO];
+    [info release];
+    [self.table reloadData];
 }
 
 - (void)acceptAction
