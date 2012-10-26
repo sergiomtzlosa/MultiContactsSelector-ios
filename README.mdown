@@ -31,3 +31,5 @@ This control implements one delegate methods:
 </pre>
 
 Loop over delegate method to parse each kind of data.
+
+UPDATE: iOS6 privacy setting ready
