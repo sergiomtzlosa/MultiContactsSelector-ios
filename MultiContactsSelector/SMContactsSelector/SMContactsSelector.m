@@ -483,11 +483,23 @@
     
     data = [[dataArray sortedArrayUsingDescriptors:sortDescriptors] retain];
     
-    NSLog(@"data Not find dup: %@", data);
+    //NSLog(@"data before duplication removal: %@", data);
    
     NSMutableArray *dataTemp = [data mutableCopy];
     
-    for (NSDictionary *item in data)
+    for (NSDictionary *item in data) {
+        
+        NSString *str = (NSString *)[item valueForKey:@"telephone"];
+        NSLog(@"The string is %@", str);
+        if (!str || [str isEqualToString:@""]) {
+            [dataTemp removeObject:item];
+            NSLog(@"removed item");
+        }
+    }
+    
+    data = dataTemp;
+    
+    for (NSDictionary *item in data) //removing duplicates
     {
         NSString *str = (NSString *)[item valueForKey:@"telephone"];
         
@@ -511,11 +523,12 @@
                     [dataTemp removeObject:item];
             }
         }
-    }
     
+    }
+
     data = dataTemp;
     
-    NSLog(@"data find dup: %@", data);
+    //NSLog(@"data after duplication removal: %@", data);
    
     if (self.savedSearchTerm)
     {
@@ -571,7 +584,7 @@
     
     
     dataArray = [[NSMutableArray alloc] initWithObjects:info, nil];
-    NSLog(@"%@", info);
+    //NSLog(@"%@", info);
   
     self.filteredListContent = [NSMutableArray arrayWithCapacity:[data count]];
     [self.searchDisplayController.searchBar setShowsCancelButton:NO];
