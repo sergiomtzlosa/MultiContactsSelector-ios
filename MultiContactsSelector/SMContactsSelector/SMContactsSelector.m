@@ -368,7 +368,7 @@
         BOOL lotsItems = NO;
         for (int i = 0; i < [propertyArray count]; i++)
         {
-            if (objs == @"")
+            if ([objs isEqual: @""])
             {
                 objs = [propertyArray objectAtIndex:i];
                 objsAux = [objsAux stringByAppendingFormat:@",%@", objs];
@@ -405,7 +405,7 @@
         [info setValue:[NSString stringWithFormat:@"%@", nameString] forKey:@"name"];
         [info setValue:@"-1" forKey:@"rowSelected"];
         
-        if ((objs != @"") || ([[objs lowercaseString] rangeOfString:@"null"].location == NSNotFound))
+        if ((![objs isEqual: @""]) || ([[objs lowercaseString] rangeOfString:@"null"].location == NSNotFound))
         {
             if (requestData == DATA_CONTACT_EMAIL)
             {
