@@ -336,6 +336,7 @@
 	table.editing = NO;
     table.backgroundColor = [UIColor clearColor];
 
+    self.upperBar.topItem.title = self.title;
     
 //	dataArray = [[NSMutableArray alloc] initWithObjects:info, nil];
 //	self.filteredListContent = [NSMutableArray arrayWithCapacity:[data count]];
