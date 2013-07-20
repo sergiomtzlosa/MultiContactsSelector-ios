@@ -483,8 +483,6 @@
     
     data = [[dataArray sortedArrayUsingDescriptors:sortDescriptors] retain];
     
-    //NSLog(@"data before duplication removal: %@", data);
-   
     NSMutableArray *dataTemp = [data mutableCopy];
     
     for (NSDictionary *item in data) {
