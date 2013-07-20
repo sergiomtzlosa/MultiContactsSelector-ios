@@ -232,6 +232,15 @@
 @synthesize showCheckButton;
 @synthesize upperBar;
 
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Default bar style is black, but you can override it to customise the appearance
+        self.barStyle = UIBarStyleBlackOpaque;
+    }
+    return self;
+}
+
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
@@ -337,6 +346,10 @@
     table.backgroundColor = [UIColor clearColor];
 
     self.upperBar.topItem.title = self.title;
+    
+    // Set bar style
+    self.barSearch.barStyle = self.barStyle;
+    self.upperBar.barStyle = self.barStyle;
     
 //	dataArray = [[NSMutableArray alloc] initWithObjects:info, nil];
 //	self.filteredListContent = [NSMutableArray arrayWithCapacity:[data count]];
