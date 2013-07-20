@@ -485,17 +485,19 @@
     
     NSMutableArray *dataTemp = [data mutableCopy];
     
-    for (NSDictionary *item in data) {
-        
-        NSString *str = (NSString *)[item valueForKey:@"telephone"];
-        NSLog(@"The string is %@", str);
-        if (!str || [str isEqualToString:@""]) {
-            [dataTemp removeObject:item];
-            NSLog(@"removed item");
+    if (self.requestData == DATA_CONTACT_TELEPHONE) {
+        // Remove people without telephone numbers in the case where
+        // that's all we care about
+        for (NSDictionary *item in data) {
+            
+            NSString *str = (NSString *)[item valueForKey:@"telephone"];
+            if (!str || [str isEqualToString:@""]) {
+                [dataTemp removeObject:item];
+            }
         }
+        
+        data = dataTemp;
     }
-    
-    data = dataTemp;
     
     for (NSDictionary *item in data) //removing duplicates
     {
