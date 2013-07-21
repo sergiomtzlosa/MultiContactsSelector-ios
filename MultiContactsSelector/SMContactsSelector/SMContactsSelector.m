@@ -58,7 +58,6 @@
 @synthesize savedSearchTerm;
 @synthesize savedScopeButtonIndex;
 @synthesize searchWasActive;
-@synthesize data;
 @synthesize barSearch;
 @synthesize alertTable;
 @synthesize selectedItem;
@@ -172,7 +171,8 @@
     CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople( addressBook );
     
     CFIndex nPeople = ABAddressBookGetPersonCount(addressBook);
-    dataArray = [NSMutableArray new];
+    
+    NSMutableSet* allContacts = [[NSMutableSet alloc] initWithCapacity:nPeople];
     
     for (int i = 0; i < nPeople; i++)
     {
@@ -268,11 +268,11 @@
             
             if (insert)
             {
-                [dataArray addObject:info];
+                [allContacts addObject:info];
             }
         }
         else
-            [dataArray addObject:info];
+            [allContacts addObject:info];
         
         [info release];
         if (name) CFRelease(name);
@@ -282,43 +282,21 @@
     CFRelease(allPeople);
     CFRelease(addressBook);
     
-    NSMutableArray *temp = [[NSMutableArray alloc] initWithArray:[[NSSet setWithArray:dataArray] allObjects]];
-    //        temp = [temp removeNullValues];
-    //        temp = [temp removeDuplicateObjects];
-    dataArray = nil;
-    dataArray = [NSArray arrayWithArray:temp];
-    
-    //        NSSortDescriptor *sortDescriptor;
-    //        sortDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"name"
-    //                                                      ascending:YES] autorelease];
-    //
-    //        NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-    //
-    NSSortDescriptor *sorter = [[[NSSortDescriptor alloc] initWithKey:@"name"
-                                                            ascending:YES
-                                                             selector:@selector(localizedStandardCompare:)] autorelease];
-    
-    NSArray *sortDescriptors = [NSArray arrayWithObject:sorter];
-    
-    data = [[dataArray sortedArrayUsingDescriptors:sortDescriptors] retain];
-    
-    NSMutableArray *dataTemp = [data mutableCopy];
-    
     if (self.requestData == DATA_CONTACT_TELEPHONE) {
         // Remove people without telephone numbers in the case where
         // that's all we care about
-        for (NSDictionary *item in data) {
+        NSArray* contactsArray = [allContacts allObjects];
+        for (NSDictionary *item in contactsArray) {
             
             NSString *str = (NSString *)[item valueForKey:@"telephone"];
             if (!str || [str isEqualToString:@""]) {
-                [dataTemp removeObject:item];
+                [allContacts removeObject:item];
             }
         }
-        
-        data = dataTemp;
     }
     
-    for (NSDictionary *item in data) //removing duplicates
+    NSArray* contactsArray = [allContacts allObjects];
+    for (NSDictionary *item in contactsArray) //removing duplicates
     {
         NSString *str = (NSString *)[item valueForKey:@"telephone"];
         
@@ -330,7 +308,7 @@
             {
                 int count = 0;
                 
-                for (NSDictionary *item in dataTemp)
+                for (NSDictionary *item in allContacts)
                 {
                     NSString *str = (NSString *)[item valueForKey:@"telephone"];
                     
@@ -339,15 +317,20 @@
                 }
                 
                 if (count > 1)
-                    [dataTemp removeObject:item];
+                    [allContacts removeObject:item];
             }
         }
     
     }
 
-    data = dataTemp;
+    NSSortDescriptor *sorter = [[[NSSortDescriptor alloc] initWithKey:@"name"
+                                                            ascending:YES
+                                                             selector:@selector(localizedStandardCompare:)] autorelease];
     
-    //NSLog(@"data after duplication removal: %@", data);
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sorter];
+    
+    NSArray* data = [[allContacts allObjects] sortedArrayUsingDescriptors:sortDescriptors];
+    [allContacts release];
    
     if (self.savedSearchTerm)
     {
@@ -402,8 +385,7 @@
     }
     
     
-    dataArray = [[NSMutableArray alloc] initWithObjects:info, nil];
-    //NSLog(@"%@", info);
+    dataArray = [[NSArray alloc] initWithObjects:info, nil];
   
     self.filteredListContent = [NSMutableArray arrayWithCapacity:[data count]];
     [self.searchDisplayController.searchBar setShowsCancelButton:NO];
@@ -891,10 +873,9 @@
 
 - (void)dealloc
 {
-	[data release];
-	[filteredListContent release];
     [dataArray release];
     
+	self.filteredListContent = nil;
     self.arrayLetters = nil;
 	[super dealloc];
 }

@@ -49,10 +49,9 @@ typedef enum
     IBOutlet UINavigationBar *upperBar;
     
     UITableView *currentTable;
-    NSArray *data;
 	NSArray *arrayLetters;
 	NSMutableArray *filteredListContent;
-    NSMutableArray *dataArray;
+    NSArray *dataArray;
 	NSMutableArray *selectedRow;
     NSMutableDictionary *selectedItem;
     AlertTableView *alertTable;
@@ -69,7 +68,6 @@ typedef enum
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *cancelItem;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *doneItem;
 @property (nonatomic, retain) IBOutlet UISearchBar *barSearch;
-@property (nonatomic, retain) NSArray *data;
 @property (nonatomic, retain) NSArray *arrayLetters;
 @property (nonatomic, retain) NSMutableDictionary *selectedItem;
 @property (nonatomic, retain) NSMutableArray *filteredListContent;
