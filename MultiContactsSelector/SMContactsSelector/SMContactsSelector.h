@@ -49,10 +49,9 @@ typedef enum
     IBOutlet UINavigationBar *upperBar;
     
     UITableView *currentTable;
-    NSArray *data;
-	NSMutableArray *arrayLetters;
+	NSArray *arrayLetters;
 	NSMutableArray *filteredListContent;
-    NSMutableArray *dataArray;
+    NSArray *dataArray;
 	NSMutableArray *selectedRow;
     NSMutableDictionary *selectedItem;
     AlertTableView *alertTable;
@@ -64,12 +63,12 @@ typedef enum
 - (void)displayChanges:(BOOL)yesOrNO;
 - (void)loadContacts;
 
+@property (nonatomic) UIBarStyle barStyle;
 @property (nonatomic, retain) IBOutlet UITableView *table;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *cancelItem;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *doneItem;
 @property (nonatomic, retain) IBOutlet UISearchBar *barSearch;
-@property (nonatomic, retain) NSArray *data;
-@property (nonatomic, retain) NSMutableArray *arrayLetters;
+@property (nonatomic, retain) NSArray *arrayLetters;
 @property (nonatomic, retain) NSMutableDictionary *selectedItem;
 @property (nonatomic, retain) NSMutableArray *filteredListContent;
 @property (nonatomic, retain) id<SMContactsSelectorDelegate> delegate;
