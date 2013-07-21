@@ -71,6 +71,10 @@
 @synthesize showCheckButton;
 @synthesize upperBar;
 
+- (id)init {
+    return [self initWithNibName:@"SMContactsSelector" bundle:nil];
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
