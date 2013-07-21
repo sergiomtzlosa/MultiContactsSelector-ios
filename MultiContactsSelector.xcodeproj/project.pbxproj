@@ -21,6 +21,8 @@
 		0F0F6F5514E46F7900AEBBF3 /* SMContactsSelector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0F0F6F4614E46F7900AEBBF3 /* SMContactsSelector.xib */; };
 		0F0F6F5614E46F7900AEBBF3 /* UIAlertView+UITableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F0F6F4914E46F7900AEBBF3 /* UIAlertView+UITableView.m */; };
 		1FB053CE163ADDE4004E4F62 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FB053CD163ADDE4004E4F62 /* Default-568h@2x.png */; };
+		52E9A4D5179B2B7200A12745 /* SMContactsSelector.strings in Resources */ = {isa = PBXBuildFile; fileRef = 52E9A4D3179B2B7200A12745 /* SMContactsSelector.strings */; };
+		52E9A4DA179B2C4D00A12745 /* SMContactsSelector.strings in Resources */ = {isa = PBXBuildFile; fileRef = 52E9A4D8179B2C4D00A12745 /* SMContactsSelector.strings */; };
 		B5B8238A145693AF005E1871 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5B82389145693AF005E1871 /* UIKit.framework */; };
 		B5B8238C145693AF005E1871 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5B8238B145693AF005E1871 /* Foundation.framework */; };
 		B5B8238E145693AF005E1871 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5B8238D145693AF005E1871 /* CoreGraphics.framework */; };
@@ -59,6 +61,8 @@
 		0F0F6F4814E46F7900AEBBF3 /* UIAlertView+UITableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+UITableView.h"; sourceTree = "<group>"; };
 		0F0F6F4914E46F7900AEBBF3 /* UIAlertView+UITableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+UITableView.m"; sourceTree = "<group>"; };
 		1FB053CD163ADDE4004E4F62 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		52E9A4D4179B2B7200A12745 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SMContactsSelector.strings; sourceTree = "<group>"; };
+		52E9A4D9179B2C4D00A12745 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/SMContactsSelector.strings; sourceTree = "<group>"; };
 		B5B82385145693AF005E1871 /* MultiContactsSelector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MultiContactsSelector.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5B82389145693AF005E1871 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		B5B8238B145693AF005E1871 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -155,6 +159,22 @@
 			path = "UIAlertView+UITableView";
 			sourceTree = "<group>";
 		};
+		52E9A4D6179B2C2F00A12745 /* en */ = {
+			isa = PBXGroup;
+			children = (
+				52E9A4D3179B2B7200A12745 /* SMContactsSelector.strings */,
+			);
+			name = en;
+			sourceTree = "<group>";
+		};
+		52E9A4D7179B2C3A00A12745 /* es */ = {
+			isa = PBXGroup;
+			children = (
+				52E9A4D8179B2C4D00A12745 /* SMContactsSelector.strings */,
+			);
+			name = es;
+			sourceTree = "<group>";
+		};
 		B5B8237A145693AF005E1871 = {
 			isa = PBXGroup;
 			children = (
@@ -202,6 +222,8 @@
 		B5B82390145693AF005E1871 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				52E9A4D7179B2C3A00A12745 /* es */,
+				52E9A4D6179B2C2F00A12745 /* en */,
 				B5B82391145693AF005E1871 /* MultiContactsSelector-Info.plist */,
 				B5B82392145693AF005E1871 /* InfoPlist.strings */,
 				B5B82395145693AF005E1871 /* main.m */,
@@ -244,6 +266,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				es,
 			);
 			mainGroup = B5B8237A145693AF005E1871;
 			productRefGroup = B5B82386145693AF005E1871 /* Products */;
@@ -266,6 +289,8 @@
 				0F0F6F4D14E46F7900AEBBF3 /* unchecked.png in Resources */,
 				0F0F6F5514E46F7900AEBBF3 /* SMContactsSelector.xib in Resources */,
 				1FB053CE163ADDE4004E4F62 /* Default-568h@2x.png in Resources */,
+				52E9A4D5179B2B7200A12745 /* SMContactsSelector.strings in Resources */,
+				52E9A4DA179B2C4D00A12745 /* SMContactsSelector.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,6 +320,22 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		52E9A4D3179B2B7200A12745 /* SMContactsSelector.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				52E9A4D4179B2B7200A12745 /* en */,
+			);
+			name = SMContactsSelector.strings;
+			sourceTree = "<group>";
+		};
+		52E9A4D8179B2C4D00A12745 /* SMContactsSelector.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				52E9A4D9179B2C4D00A12745 /* es */,
+			);
+			name = SMContactsSelector.strings;
+			sourceTree = "<group>";
+		};
 		B5B82392145693AF005E1871 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
