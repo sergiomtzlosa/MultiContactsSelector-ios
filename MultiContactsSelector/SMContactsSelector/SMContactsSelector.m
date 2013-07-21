@@ -49,91 +49,6 @@
 
 @end
 
-@interface NSMutableArray (Duplicates)
-
-- (NSMutableArray *)removeDuplicateObjects;
-
-- (NSMutableArray *)removeNullValues;
-
-- (NSMutableArray *)reverse;
-
-@end
-
-@implementation NSMutableArray (Duplicates)
-
-- (NSMutableArray *)reverse
-{
-    NSMutableArray *array = [NSMutableArray arrayWithCapacity:[self count]];
-    NSEnumerator *enumerator = [self reverseObjectEnumerator];
-    
-    for (id element in enumerator) 
-    {
-        [array addObject:element];
-    }
-    
-    return array;
-}
-
-- (NSMutableArray *)removeNullValues
-{
-    NSMutableArray *removed = [[NSMutableArray alloc] initWithArray:self];
-    int index = 0;
-    
-    for (NSDictionary *d in self)
-    {
-        if ([[d valueForKey:@"name"] containsString:@"null"])
-        {
-            [removed removeObjectAtIndex:index];
-        }
-        
-        index++;
-    }
-    
-    return removed;
-}
-
-- (NSMutableArray *)removeDuplicateObjects
-{
-    NSMutableArray *removed = [[NSMutableArray alloc] initWithArray:self];
-    NSMutableArray *removedTemp = [[[NSMutableArray alloc] initWithArray:self] reverse];
-    NSMutableArray *selfTemp = [[[NSMutableArray alloc] initWithArray:self] reverse];
-
-    int index = [removed indexOfObject:[removed lastObject]];
-    
-    for (NSDictionary *d in selfTemp)
-    {
-        NSString *t = [NSString stringWithFormat:@"%@", [d valueForKey:@"name"]];
-        NSString *str1 = [t stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        
-        int count = 0;
-        for (NSDictionary *dict in removedTemp)
-        {
-            NSString *t = [NSString stringWithFormat:@"%@", [dict valueForKey:@"name"]];
-            NSString *str2 = [t stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-            
-            if ([str1 isEqualToString:str2])
-            {
-                count++;
-                
-                if (count > 1)
-                {
-                    [removed removeObjectAtIndex:index];
-                    index = [removed indexOfObject:[removed lastObject]];
-                    removedTemp = nil;
-                    removedTemp = [removed reverse];
-                    break;
-                }
-            }
-        }
-
-        index--;
-    }
-
-    return removed;
-}
-
-@end
-
 @implementation SMContactsSelector
 @synthesize table;
 @synthesize cancelItem;
@@ -248,14 +163,6 @@
     // Set bar style
     self.barSearch.barStyle = self.barStyle;
     self.upperBar.barStyle = self.barStyle;
-    
-//	dataArray = [[NSMutableArray alloc] initWithObjects:info, nil];
-//	self.filteredListContent = [NSMutableArray arrayWithCapacity:[data count]];
-//	[self.searchDisplayController.searchBar setShowsCancelButton:NO];
-//	selectedRow = [NSMutableArray new];
-//	table.editing = NO;
-//	[info release];
-//	[self.table reloadData];
 }
 
 - (void)loadContacts
