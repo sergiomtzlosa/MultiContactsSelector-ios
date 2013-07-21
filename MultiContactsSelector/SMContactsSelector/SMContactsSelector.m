@@ -8,98 +8,23 @@
 
 #import "SMContactsSelector.h"
 
-@interface NSArray (Alphabet)
-
-+ (NSArray *)spanishAlphabet;
-
-+ (NSArray *)englishAlphabet;
-
-- (NSMutableArray *)createList;
-
-- (NSArray *)castToArray;
-
-- (NSMutableArray *)castToMutableArray;
-
-- (NSMutableArray *)createList;
-
-@end
-
-@implementation NSArray (Alphabet)
-
-+ (NSArray *)spanishAlphabet
-{
-    NSArray *letters = [[NSArray alloc] initWithObjects:@"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"I", @"J", @"K", @"L", @"M", @"N", @"Ñ", @"O", @"P", @"Q", @"R", @"S", @"T", @"U", @"V", @"W", @"X", @"Y", @"Z", nil];
-    
-    NSArray *aux = [NSArray arrayWithArray:letters];
-    [letters release];
-    return aux;    
-}
-
-+ (NSArray *)englishAlphabet
-{
-    NSArray *letters = [[NSArray alloc] initWithObjects:@"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"I", @"J", @"K", @"L", @"M", @"N", @"O", @"P", @"Q", @"R", @"S", @"T", @"U", @"V", @"W", @"X", @"Y", @"Z", nil];
-    
-    NSArray *aux = [NSArray arrayWithArray:letters];
-    [letters release];
-    return aux;    
-}
-
-- (NSMutableArray *)createList
-{
-    NSMutableArray *list = [[NSMutableArray alloc] initWithArray:self];
-    [list addObject:@"#"];
-    
-    NSMutableArray *aux = [NSMutableArray arrayWithArray:list];
-    [list release];
-    return aux;
-}
-
-- (NSArray *)castToArray
-{
-    if ([self isKindOfClass:[NSMutableArray class]])
-    {
-        NSArray *a = [[NSArray alloc] initWithArray:self];
-        NSArray *aux = [NSArray arrayWithArray:a];
-        [a release];
-        return aux;
-    }
-    
-    return nil;
-}
-
-- (NSMutableArray *)castToMutableArray
-{
-    if ([self isKindOfClass:[NSArray class]])
-    {
-        NSMutableArray *a = [[NSMutableArray alloc] initWithArray:self];
-        NSMutableArray *aux = [NSMutableArray arrayWithArray:a];
-        [a release];
-        return aux;
-    }
-    
-    return nil;
-}
-
-@end
-
 @interface NSString (character)
 
-- (BOOL)isLetter;
-
+- (BOOL)isLetterInAlphabet:(NSArray*)alphabet;
 - (BOOL)isRecordInArray:(NSArray *)array;
 
 @end
 
 @implementation NSString (character)
 
-- (BOOL)isLetter
+- (BOOL)isLetterInAlphabet:(NSArray *)alphabet
 {
-	NSArray *letters = [NSArray spanishAlphabet]; //replace by your alphabet
 	BOOL isLetter = NO;
+    NSString* firstCharacter = [[self substringToIndex:1] uppercaseString];
 	
-	for (int i = 0; i < [letters count]; i++)
+	for (NSString* letter in alphabet)
 	{
-		if ([[[self substringToIndex:1] uppercaseString] isEqualToString:[letters objectAtIndex:i]]) 
+		if ([firstCharacter isEqualToString:letter])
 		{
 			isLetter = YES;
 			break;
@@ -256,27 +181,11 @@
                                         reason:@"Define requestData variable (EMAIL or TELEPHONE)" 
                                       userInfo:nil]);
     }
-    
-    NSString *currentLanguage = [[[[NSUserDefaults standardUserDefaults] objectForKey:@"AppleLanguages"] objectAtIndex:0] lowercaseString];
-	
-    // Jetzt Spanisch und Englisch nur
-    // Por el momento solo ingles y español
-    // At the moment only Spanish and English
-    // replace by your alphabet
-	if ([currentLanguage isEqualToString:@"es"])
-	{
-		arrayLetters = [[[NSArray spanishAlphabet] createList] retain];
-        cancelItem.title = @"Cancelar";
-        doneItem.title = @"Hecho";
-        alertTitle = @"Selecciona";
-	}
-	else
-	{
-		arrayLetters = [[[NSArray englishAlphabet] createList] retain];
-        cancelItem.title = @"Cancel";
-        doneItem.title = @"Done";
-        alertTitle = @"Select";
-	}
+
+    self.arrayLetters = [NSLocalizedStringFromTable(@"alphabet", @"SMContactsSelector", nil) componentsSeparatedByString:@" "];
+    cancelItem.title = NSLocalizedStringFromTable(@"cancel", @"SMContactsSelector", nil);
+    doneItem.title = NSLocalizedStringFromTable(@"done", @"SMContactsSelector", nil);
+    alertTitle = NSLocalizedStringFromTable(@"alert_title", @"SMContactsSelector", nil);
     
 	cancelItem.action = @selector(dismiss);
 	doneItem.action = @selector(acceptAction);
@@ -313,18 +222,7 @@
     }
     else
     {
-        NSString *currentLanguage = [[[[NSUserDefaults standardUserDefaults] objectForKey:@"AppleLanguages"] objectAtIndex:0] lowercaseString];
-        
-        NSString *msg = @"";
-        
-        if ([currentLanguage isEqualToString:@"es"])
-        {
-            msg = @"No se tiene permiso para obtener los contactos, por favor, actívelo en Preferencias de la privacidad.";
-        }
-        else
-        {
-            msg = @"Unable to get your contacts, enable it on your privacy preferences.";
-        }
+        NSString *msg = NSLocalizedStringFromTable(@"permission_denied", @"SMContactsSelector", nil);
         
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
                                                         message:msg
@@ -586,7 +484,7 @@
             NSString *name = [dict valueForKey:@"name"];
             name = [name stringByReplacingOccurrencesOfString:@" " withString:@""];
             
-            if ((![name isLetter]) && (![name containsNullString]))
+            if ((![name isLetterInAlphabet:arrayLetters]) && (![name containsNullString]))
             {
                 [array addObject:dict];
             }
@@ -906,7 +804,7 @@
 		NSString *name = [dict valueForKey:@"name"];
 		name = [name stringByReplacingOccurrencesOfString:@" " withString:@""];
 		
-		if (![name isLetter]) 
+		if (![name isLetterInAlphabet:arrayLetters])
 		{
 			i++;
 		}
@@ -1089,7 +987,8 @@
 	[data release];
 	[filteredListContent release];
     [dataArray release];
-    [arrayLetters release];
+    
+    self.arrayLetters = nil;
 	[super dealloc];
 }
 

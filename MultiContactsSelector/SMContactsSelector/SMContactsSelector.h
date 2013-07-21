@@ -50,7 +50,7 @@ typedef enum
     
     UITableView *currentTable;
     NSArray *data;
-	NSMutableArray *arrayLetters;
+	NSArray *arrayLetters;
 	NSMutableArray *filteredListContent;
     NSMutableArray *dataArray;
 	NSMutableArray *selectedRow;
@@ -70,7 +70,7 @@ typedef enum
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *doneItem;
 @property (nonatomic, retain) IBOutlet UISearchBar *barSearch;
 @property (nonatomic, retain) NSArray *data;
-@property (nonatomic, retain) NSMutableArray *arrayLetters;
+@property (nonatomic, retain) NSArray *arrayLetters;
 @property (nonatomic, retain) NSMutableDictionary *selectedItem;
 @property (nonatomic, retain) NSMutableArray *filteredListContent;
 @property (nonatomic, retain) id<SMContactsSelectorDelegate> delegate;
