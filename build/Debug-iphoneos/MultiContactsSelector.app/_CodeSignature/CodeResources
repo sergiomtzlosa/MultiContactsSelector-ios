@@ -14,7 +14,7 @@
 		</data>
 		<key>SMContactsSelector.nib</key>
 		<data>
-		xAK8MJO6z0IY3XTb8oJSgnrTaHM=
+		juR5jrznKs+yOIHzQzh6PpKcX30=
 		</data>
 		<key>checked.png</key>
 		<data>
@@ -22,15 +22,23 @@
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
-		z8nXNm0RBxi10RBOmfIdYsC62Ic=
+		O+IX3NfXXDZCqB++TZIdfgI0DTU=
 		</data>
 		<key>en.lproj/InfoPlist.strings</key>
 		<data>
 		zmV6UqBSo6r1NOz798vd5O4zTBA=
 		</data>
+		<key>en.lproj/SMContactsSelector.strings</key>
+		<data>
+		mE7skt4wDcr001eZrYv6tnIPv4M=
+		</data>
 		<key>en.lproj/ViewController.nib</key>
 		<data>
-		ayeiaQFop4xz04OitIIyy6D1lzI=
+		hLgxYZgMEsxYWyPWdEH+5tu26sI=
+		</data>
+		<key>es.lproj/SMContactsSelector.strings</key>
+		<data>
+		LtyFk37/IeleJkFcx6RrG9q6b8I=
 		</data>
 		<key>unchecked.png</key>
 		<data>

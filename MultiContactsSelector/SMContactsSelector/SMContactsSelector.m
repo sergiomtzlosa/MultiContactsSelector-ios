@@ -137,6 +137,7 @@
     {
         // The user has previously given access, add the contact
         [self loadContacts];
+        CFRelease(addressBookRef);
     }
     else
     {
@@ -149,7 +150,8 @@
                                               otherButtonTitles:@"OK", nil];
         alert.tag = 457;
         [alert show];
-        
+        [alert release];
+        CFRelease(addressBookRef);
         return;
     }
     
@@ -210,9 +212,7 @@
         name = ABRecordCopyValue(person, kABPersonFirstNameProperty);
         CFStringRef lastNameString;
         lastNameString = ABRecordCopyValue(person, kABPersonLastNameProperty);
-        CFStringRef emailString;
-        emailString = ABRecordCopyValue(person, kABPersonEmailProperty);
-        
+     
         NSString *nameString = (NSString *)name;
         
         NSString *lastName = (NSString *)lastNameString;

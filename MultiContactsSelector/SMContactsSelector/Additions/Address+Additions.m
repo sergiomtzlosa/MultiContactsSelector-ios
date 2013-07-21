@@ -27,13 +27,15 @@
         if (currentID == recordID) 
             break;
     }
-
+    
+    CFRelease(allPeople);
+    CFRelease(addressBook);
     return person;
 }
 
 + (NSArray *)getAllRecordIDs
 {
-    NSMutableArray *items = [NSMutableArray new];
+    NSMutableArray *items = [NSMutableArray array];
     
     ABAddressBookRef addressBook = ABAddressBookCreate( );
 	CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople( addressBook );
@@ -48,6 +50,8 @@
         [items addObject:[NSNumber numberWithInt:recordID]];
     }
     
+    CFRelease(allPeople);
+    CFRelease(addressBook);
     return (NSArray *)items;
 }
 

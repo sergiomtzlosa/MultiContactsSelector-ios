@@ -258,7 +258,7 @@
 		B5B8237C145693AF005E1871 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0460;
 			};
 			buildConfigurationList = B5B8237F145693AF005E1871 /* Build configuration list for PBXProject "MultiContactsSelector" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -360,8 +360,12 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jennifer Clark (27GZVNGA24)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jennifer Clark (27GZVNGA24)";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Sergio Martinez-Losa Del Rincon (86CR82ALWP)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Sergio Martinez-Losa Del Rincon (86CR82ALWP)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -374,10 +378,11 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				PROVISIONING_PROFILE = "55EDF914-DABC-4BBA-905E-701234500080";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ACB01118-C438-4F25-AC98-F85FA17A042D";
+				PROVISIONING_PROFILE = "BB71EDC8-AAC2-45D2-AE18-7632815F51F8";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "BB71EDC8-AAC2-45D2-AE18-7632815F51F8";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -387,18 +392,23 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jennifer Clark (27GZVNGA24)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jennifer Clark (27GZVNGA24)";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Sergio Martinez-Losa Del Rincon (86CR82ALWP)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Sergio Martinez-Losa Del Rincon (86CR82ALWP)";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "55EDF914-DABC-4BBA-905E-701234500080";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ACB01118-C438-4F25-AC98-F85FA17A042D";
+				PROVISIONING_PROFILE = "BB71EDC8-AAC2-45D2-AE18-7632815F51F8";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "BB71EDC8-AAC2-45D2-AE18-7632815F51F8";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};

@@ -53,16 +53,14 @@
 																				   (CFStringRef)@"!*'();:@&=+$,/?%#[]",
 																				   kCFStringEncodingUTF8 );
 	
-    NSString *str = encodedString;
-    [encodedString release];
-    return str;
+    return [encodedString autorelease];
 }
 
 - (NSString *)reverseGeocode
 {
-	NSString *urlEncode = [[self urlEncodeCopy] retain];
+	NSString *urlEncode = [self urlEncodeCopy];
 	NSString *gUrl = [NSString stringWithFormat:@"http://maps.google.com/maps/geo?q=%@&hl=%@&oe=UTF8", urlEncode, NSLocalizedString(@"language", @"")];
-	[urlEncode release];
+	
 	NSString *infoData = [[[NSString alloc] initWithContentsOfURL:[NSURL URLWithString:gUrl] 
 														 encoding:NSUTF8StringEncoding 
 															error:nil] autorelease];
