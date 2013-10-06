@@ -10,4 +10,5 @@ dependencies: \
   /Users/sid/Projects/MultiContactsSelector-ios/MultiContactsSelector/SMContactsSelector/JSON/NSObject+SBJSON.h \
   /Users/sid/Projects/MultiContactsSelector-ios/MultiContactsSelector/SMContactsSelector/JSON/NSString+SBJSON.h \
   /Users/sid/Projects/MultiContactsSelector-ios/MultiContactsSelector/SMContactsSelector/Additions/Address+Additions.h \
-  /Users/sid/Projects/MultiContactsSelector-ios/MultiContactsSelector/SMContactsSelector/UIAlertView+UITableView/UIAlertView+UITableView.h
+  /Users/sid/Projects/MultiContactsSelector-ios/MultiContactsSelector/SMContactsSelector/UIAlertView+UITableView/UIAlertView+UITableView.h \
+  /Users/sid/Projects/MultiContactsSelector-ios/MultiContactsSelector/SMContactsSelector/UIAlertView+UITableView/CustomIOS7AlertView.h
