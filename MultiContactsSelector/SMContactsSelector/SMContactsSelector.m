@@ -668,7 +668,7 @@
         selectedItem = item;
         self.currentTable = tableView;
 
-        if (sysVer >= 6.0)
+        if (sysVer >= 7.0)
         {
             contactRow = indexPath.row;
             
