@@ -36,4 +36,4 @@ Loop over delegate method to parse each kind of data.
  * Updated to iOS7
 
 
-TODO : Fix landscpae bounds for iOS7 message view.
+TODO : Fix landscape bounds for iOS7 message view.
