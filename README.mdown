@@ -32,4 +32,5 @@ This control implements one delegate methods:
 
 Loop over delegate method to parse each kind of data.
 
-UPDATE: iOS6 privacy setting ready
+ * iOS6 privacy setting ready
+ [UPDATED] * Updated to iOS7

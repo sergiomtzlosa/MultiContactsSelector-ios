@@ -668,7 +668,7 @@
         selectedItem = item;
         self.currentTable = tableView;
 
-        if (sysVer >= 7.0)
+        if (sysVer >= 6.0)
         {
             contactRow = indexPath.row;
             
@@ -692,8 +692,10 @@
             [alertIOS7 setDelegate:self];
             [alertIOS7 setUseMotionEffects:true];
             [alertIOS7 setUserInteractionEnabled:YES];
+            [alertIOS7 setAutoresizesSubviews:YES];
             [alertIOS7 setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
             [alertIOS7 show];
+            [alertIOS7 setClipsToBounds:YES];
         }
         else
         {
@@ -1064,9 +1066,26 @@
     return YES;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    return interfaceOrientation == UIInterfaceOrientationPortrait;
+    if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation))
+    {
+        if (alertIOS7 != nil)
+        {
+            NSLog(@"landscape");
+            [alertIOS7 layoutSubviews];
+            [alertIOS7 layoutIfNeeded];
+        }
+    }
+    else
+    {
+        if (alertIOS7 != nil)
+        {
+            [alertIOS7 layoutSubviews];
+            [alertIOS7 layoutIfNeeded];
+            NSLog(@"portrait again!");
+        }
+    }
 }
 
 #pragma mark -

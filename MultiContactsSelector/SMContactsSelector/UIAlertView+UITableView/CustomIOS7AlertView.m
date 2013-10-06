@@ -30,7 +30,7 @@ CGFloat buttonSpacerHeight = 0;
 - (id)initWithParentView: (UIView *)_parentView
 {
     self = [super initWithFrame:_parentView.frame];
-    
+
     if (self) {
         parentView = _parentView;
         delegate = self;
