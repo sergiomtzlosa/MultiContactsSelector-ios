@@ -7,10 +7,14 @@
 //
 
 #import "SMContactsSelector.h"
+#import "CustomIOS7AlertView.h"
+
+#define kIOS7TableView 9999
 
 @interface NSString (character)
 
 - (BOOL)isLetterInAlphabet:(NSArray*)alphabet;
+
 - (BOOL)isRecordInArray:(NSArray *)array;
 
 @end
@@ -49,7 +53,33 @@
 
 @end
 
+@interface SMContactsSelector ()
+
+- (UIView *)createTableView;
+
+- (void)postActionSelectRowAtIndex:(NSInteger)row
+                           section:(NSInteger)section
+                       withContext:(id)context
+                              text:(NSString *)text
+                           andItem:(NSMutableDictionary *)item
+                               row:(int)rowSelected;
+
+@property (nonatomic, strong) NSArray *objectsArray;
+@property (nonatomic, strong) NSArray *labelsArray;
+@property (nonatomic, strong)CustomIOS7AlertView *alertIOS7;
+@property (nonatomic, strong)UITableView *telsTable;
+
+@end
+
 @implementation SMContactsSelector
+{
+    int contactRow;
+}
+
+@synthesize telsTable;
+@synthesize alertIOS7;
+@synthesize objectsArray;
+@synthesize labelsArray;
 @synthesize table;
 @synthesize cancelItem;
 @synthesize doneItem;
@@ -71,7 +101,8 @@
 @synthesize showCheckButton;
 @synthesize upperBar;
 
-- (id)init {
+- (id)init
+{
     return [self initWithNibName:@"SMContactsSelector" bundle:nil];
 }
 
@@ -388,7 +419,6 @@
         [array release];
     }
     
-    
     dataArray = [[NSArray alloc] initWithObjects:info, nil];
   
     self.filteredListContent = [NSMutableArray arrayWithCapacity:[data count]];
@@ -448,7 +478,6 @@
     if ([self.delegate respondsToSelector:@selector(numberOfRowsSelected:withData:andDataType:)]) 
         [self.delegate numberOfRowsSelected:[objects count] withData:objects andDataType:requestData];
     
-    
 	[objects release];
 	[self dismiss];
 }
@@ -467,22 +496,88 @@
 	}
 	else
 	{
-		[self tableView:self.table accessoryButtonTappedForRowWithIndexPath:indexPath];
-		[self.table deselectRowAtIndexPath:indexPath animated:YES];
+        if (tableView.tag == kIOS7TableView)
+        {
+            [selectedItem setObject:[NSNumber numberWithInteger:indexPath.row] forKey:@"rowSelected"];
+            [alertIOS7 close];
+            [telsTable deselectRowAtIndexPath:indexPath animated:YES];
+
+            if (showModal)
+            {
+                BOOL checked = [[selectedItem objectForKey:@"checked"] boolValue];
+                
+                [selectedItem setObject:[NSNumber numberWithBool:!checked] forKey:@"checked"];
+                
+                UITableViewCell *cell = [selectedItem objectForKey:@"cell"];
+                UIButton *button = (UIButton *)cell.accessoryView;
+                
+                UIImage *newImage = (checked) ? [UIImage imageNamed:@"unchecked.png"] : [UIImage imageNamed:@"checked.png"];
+                [button setBackgroundImage:newImage forState:UIControlStateNormal];
+                
+                if (tableView == self.searchDisplayController.searchResultsTableView)
+                {
+                    [self.searchDisplayController.searchResultsTableView reloadData];
+                    [selectedRow addObject:selectedItem];
+                }
+            }
+            
+            [self postActionSelectRowAtIndex:indexPath.row
+                                     section:indexPath.section
+                                 withContext:nil
+                                        text:[objectsArray objectAtIndex:indexPath.row]
+                                     andItem:selectedItem
+                                         row:contactRow];
+        }
+        else
+        {
+            [self tableView:self.table accessoryButtonTappedForRowWithIndexPath:indexPath];
+            [self.table deselectRowAtIndexPath:indexPath animated:YES];
+        }
 	}	
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	static NSString *kCustomCellID = @"MyCellID";
-	
-	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCustomCellID];
-	if (cell == nil)
-	{
-		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCustomCellID] autorelease];
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-	}
+	UITableViewCell *cell = nil;
+    static NSString *kCustomCellID;
+    
+    if (tableView.tag == kIOS7TableView)
+    {
+        kCustomCellID = @"iOS7TableView";
+        
+        cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:kCustomCellID];
+        
+        if (cell == nil)
+        {
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kCustomCellID] autorelease];
+            cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+            cell.textLabel.font = [UIFont boldSystemFontOfSize:14];
+        }
+
+        cell.textLabel.text = [objectsArray objectAtIndex:indexPath.row];
+        
+        NSInteger rowSelected = [[selectedItem valueForKey:@"rowSelected"] integerValue];
+        
+        if ((rowSelected != -1) && (indexPath.row == rowSelected))
+        {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        }
+        
+        return cell;
+    }
+    else
+    {
+        kCustomCellID = @"MyCellID";
+        
+        cell = [tableView dequeueReusableCellWithIdentifier:kCustomCellID];
+        
+        if (cell == nil)
+        {
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCustomCellID] autorelease];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+        }
+    }
 	
 	NSMutableDictionary *item = nil;
 	if (tableView == self.searchDisplayController.searchResultsTableView)
@@ -537,7 +632,7 @@
 	
 	if (indexPath != nil)
 	{
-		[self tableView: self.table accessoryButtonTappedForRowWithIndexPath: indexPath];
+		[self tableView:self.table accessoryButtonTappedForRowWithIndexPath:indexPath];
 	}
 }
 
@@ -555,37 +650,68 @@
 		item = (NSMutableDictionary *)[obj objectAtIndex:indexPath.row];
 	}
     
-    NSArray *objectsArray = nil;
+    objectsArray = nil;
     
     if (requestData == DATA_CONTACT_TELEPHONE)
-        objectsArray = (NSArray *)[[item valueForKey:@"telephone"] componentsSeparatedByString:@","];
+        objectsArray = [(NSArray *)[[item valueForKey:@"telephone"] componentsSeparatedByString:@","] retain];
     else if (requestData == DATA_CONTACT_EMAIL)
-        objectsArray = (NSArray *)[[item valueForKey:@"email"] componentsSeparatedByString:@","];
+        objectsArray = [(NSArray *)[[item valueForKey:@"email"] componentsSeparatedByString:@","] retain];
     else
-        objectsArray = (NSArray *)[[item valueForKey:@"recordID"] componentsSeparatedByString:@","];
+        objectsArray = [(NSArray *)[[item valueForKey:@"recordID"] componentsSeparatedByString:@","] retain];
+
+    float sysVer = [[[UIDevice currentDevice] systemVersion] floatValue];
     
     int objectsCount = [objectsArray count];
-    
+
     if (objectsCount > 1)
     {
         selectedItem = item;
         self.currentTable = tableView;
-        
-        alertTable = [[AlertTableView alloc] initWithCaller:self 
-                                                       data:objectsArray 
-                                                      title:alertTitle
-                                                    context:self
-                                                 dictionary:item
-                                                    section:indexPath.section
-                                                        row:indexPath.row];
-        alertTable.isModal = showModal;
-        [alertTable show];
-        [alertTable release];
+
+        if (sysVer >= 7.0)
+        {
+            contactRow = indexPath.row;
+            
+            alertIOS7 = [[CustomIOS7AlertView alloc] initWithParentView:self.view];
+            
+            NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
+            
+            NSString *cancelString = @"";
+            
+            if ([language containsString:@"es"])
+            {
+                cancelString = @"Cancelar";
+            }
+            else
+            {
+                cancelString = @"Cancel";
+            }
+            
+            [alertIOS7 setContainerView:[self createTableView]];
+            [alertIOS7 setButtonTitles:[NSArray arrayWithObjects:cancelString, nil]];
+            [alertIOS7 setDelegate:self];
+            [alertIOS7 setUseMotionEffects:true];
+            [alertIOS7 setUserInteractionEnabled:YES];
+            [alertIOS7 setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+            [alertIOS7 show];
+        }
+        else
+        {
+            alertTable = [[AlertTableView alloc] initWithCaller:self
+                                                           data:objectsArray
+                                                          title:alertTitle
+                                                        context:self
+                                                     dictionary:item
+                                                        section:indexPath.section
+                                                            row:indexPath.row];
+            alertTable.isModal = showModal;
+            [alertTable show];
+            [alertTable release];
+        }
     }
     else
     {
-        
-        if (showModal) 
+        if (showModal)
         {
             BOOL checked = [[item objectForKey:@"checked"] boolValue];
             
@@ -607,12 +733,62 @@
         {
             if ([self.delegate respondsToSelector:@selector(numberOfRowsSelected:withData:andDataType:)])
             {
-                [self.delegate numberOfRowsSelected:1 
+                [self.delegate numberOfRowsSelected:1
                                            withData:[NSArray arrayWithObject:[item valueForKey:@"telephoneSelected"]]
                                         andDataType:requestData];
             }
         }
     }
+}
+
+#pragma mark -
+#pragma mark Custom view iOS7
+
+- (UIView *)createTableView
+{
+    UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 290, 200)];
+    contentView.backgroundColor = [UIColor clearColor];
+    
+    NSString *currentLanguage = [[[[NSUserDefaults standardUserDefaults] objectForKey:@"AppleLanguages"] objectAtIndex:0] lowercaseString];
+    
+    NSString *titleAlert = @"";
+    
+    if ([currentLanguage isEqualToString:@"es"])
+	{
+        titleAlert = @"Selecciona";
+	}
+	else
+	{
+        titleAlert = @"Select";
+	}
+    
+    UILabel *labelTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, contentView.frame.size.width, 30)];
+    labelTitle.text = titleAlert;
+    labelTitle.backgroundColor = [UIColor clearColor];
+    labelTitle.textAlignment = NSTextAlignmentCenter;
+    labelTitle.textColor = [UIColor blackColor];
+    labelTitle.font = [UIFont boldSystemFontOfSize:15];
+    
+    [contentView addSubview:labelTitle];
+    [labelTitle release];
+    
+    telsTable = [[UITableView alloc] initWithFrame:CGRectMake(11, labelTitle.frame.size.height + 10, contentView.frame.size.width - 22, 150) style:UITableViewStylePlain];
+    
+    telsTable.backgroundColor = [UIColor whiteColor];
+    
+    if ([objectsArray count] < 5)
+    {
+        telsTable.scrollEnabled = NO;
+    }
+    
+    telsTable.delegate = self;
+    telsTable.dataSource = self;
+    
+    telsTable.tag = kIOS7TableView;
+    [contentView addSubview:telsTable];
+    [telsTable reloadData];
+    
+    return [contentView autorelease];
 }
 
 #pragma mark
@@ -624,6 +800,16 @@
                        text:(NSString *)text 
                     andItem:(NSMutableDictionary *)item
                         row:(int)rowSelected
+{
+    [self postActionSelectRowAtIndex:row section:section withContext:context text:text andItem:item row:rowSelected];
+}
+
+- (void)postActionSelectRowAtIndex:(NSInteger)row
+                           section:(NSInteger)section
+                       withContext:(id)context
+                              text:(NSString *)text
+                           andItem:(NSMutableDictionary *)item
+                               row:(int)rowSelected
 {
     if ([text isEqualToString:@"-1"])
     {
@@ -651,6 +837,7 @@
         
         UIImage *newImage = [UIImage imageNamed:@"checked.png"];
         [button setBackgroundImage:newImage forState:UIControlStateNormal]; 
+        [button reloadInputViews];
         
         if (self.currentTable == self.searchDisplayController.searchResultsTableView)
         {
@@ -684,6 +871,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
+    if (tableView.tag == kIOS7TableView)
+        return [objectsArray count];
+    
 	if (tableView == self.searchDisplayController.searchResultsTableView)
         return [self.filteredListContent count];
 	
@@ -715,7 +905,8 @@
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView 
 {
-	if (tableView == self.searchDisplayController.searchResultsTableView)
+	if ((tableView == self.searchDisplayController.searchResultsTableView) ||
+        (tableView.tag == kIOS7TableView))
 	{
         return nil;
     }
@@ -725,7 +916,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
 {
-	if (tableView == self.searchDisplayController.searchResultsTableView)
+	if ((tableView == self.searchDisplayController.searchResultsTableView) ||
+        (tableView.tag == kIOS7TableView))
 	{
         return 0;
     }
@@ -735,7 +927,8 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-	if (tableView == self.searchDisplayController.searchResultsTableView)
+	if ((tableView == self.searchDisplayController.searchResultsTableView) ||
+        (tableView.tag == kIOS7TableView))
 	{
         return 1;
     }
@@ -745,7 +938,8 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section 
 {	
-	if (tableView == self.searchDisplayController.searchResultsTableView)
+	if ((tableView == self.searchDisplayController.searchResultsTableView) ||
+        (tableView.tag == kIOS7TableView))
 	{
         return @"";
     }
@@ -875,10 +1069,19 @@
     return interfaceOrientation == UIInterfaceOrientationPortrait;
 }
 
+#pragma mark -
+#pragma mark CustomIOS7AlertViewDelegate methods
+
+- (void)customIOS7dialogButtonTouchUpInside:(CustomIOS7AlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    [alertView close];
+}
+
 - (void)dealloc
 {
     [dataArray release];
-    
+    [objectsArray release];
+    [telsTable release];
 	self.filteredListContent = nil;
     self.arrayLetters = nil;
 	[super dealloc];

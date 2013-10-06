@@ -20,6 +20,8 @@
 		0F0F6F5414E46F7900AEBBF3 /* SMContactsSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F0F6F4514E46F7900AEBBF3 /* SMContactsSelector.m */; };
 		0F0F6F5514E46F7900AEBBF3 /* SMContactsSelector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0F0F6F4614E46F7900AEBBF3 /* SMContactsSelector.xib */; };
 		0F0F6F5614E46F7900AEBBF3 /* UIAlertView+UITableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F0F6F4914E46F7900AEBBF3 /* UIAlertView+UITableView.m */; };
+		1F5B83081801ABB0009D06EF /* CustomIOS7AlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F5B83071801ABB0009D06EF /* CustomIOS7AlertView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		1F5B830A1801ABFD009D06EF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F5B83091801ABFD009D06EF /* QuartzCore.framework */; };
 		1FB053CE163ADDE4004E4F62 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FB053CD163ADDE4004E4F62 /* Default-568h@2x.png */; };
 		52E9A4D5179B2B7200A12745 /* SMContactsSelector.strings in Resources */ = {isa = PBXBuildFile; fileRef = 52E9A4D3179B2B7200A12745 /* SMContactsSelector.strings */; };
 		52E9A4DA179B2C4D00A12745 /* SMContactsSelector.strings in Resources */ = {isa = PBXBuildFile; fileRef = 52E9A4D8179B2C4D00A12745 /* SMContactsSelector.strings */; };
@@ -60,6 +62,9 @@
 		0F0F6F4614E46F7900AEBBF3 /* SMContactsSelector.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SMContactsSelector.xib; sourceTree = "<group>"; };
 		0F0F6F4814E46F7900AEBBF3 /* UIAlertView+UITableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+UITableView.h"; sourceTree = "<group>"; };
 		0F0F6F4914E46F7900AEBBF3 /* UIAlertView+UITableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+UITableView.m"; sourceTree = "<group>"; };
+		1F5B83061801ABB0009D06EF /* CustomIOS7AlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomIOS7AlertView.h; sourceTree = "<group>"; };
+		1F5B83071801ABB0009D06EF /* CustomIOS7AlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomIOS7AlertView.m; sourceTree = "<group>"; };
+		1F5B83091801ABFD009D06EF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		1FB053CD163ADDE4004E4F62 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		52E9A4D4179B2B7200A12745 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SMContactsSelector.strings; sourceTree = "<group>"; };
 		52E9A4D9179B2C4D00A12745 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/SMContactsSelector.strings; sourceTree = "<group>"; };
@@ -85,6 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F5B830A1801ABFD009D06EF /* QuartzCore.framework in Frameworks */,
 				B5B823AC14569429005E1871 /* AddressBookUI.framework in Frameworks */,
 				B5B823AA1456941D005E1871 /* AddressBook.framework in Frameworks */,
 				B5B8238A145693AF005E1871 /* UIKit.framework in Frameworks */,
@@ -153,10 +159,20 @@
 		0F0F6F4714E46F7900AEBBF3 /* UIAlertView+UITableView */ = {
 			isa = PBXGroup;
 			children = (
+				1F5B83051801AB9F009D06EF /* CustomView */,
 				0F0F6F4814E46F7900AEBBF3 /* UIAlertView+UITableView.h */,
 				0F0F6F4914E46F7900AEBBF3 /* UIAlertView+UITableView.m */,
 			);
 			path = "UIAlertView+UITableView";
+			sourceTree = "<group>";
+		};
+		1F5B83051801AB9F009D06EF /* CustomView */ = {
+			isa = PBXGroup;
+			children = (
+				1F5B83061801ABB0009D06EF /* CustomIOS7AlertView.h */,
+				1F5B83071801ABB0009D06EF /* CustomIOS7AlertView.m */,
+			);
+			name = CustomView;
 			sourceTree = "<group>";
 		};
 		52E9A4D6179B2C2F00A12745 /* en */ = {
@@ -196,6 +212,7 @@
 		B5B82388145693AF005E1871 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1F5B83091801ABFD009D06EF /* QuartzCore.framework */,
 				B5B823AB14569429005E1871 /* AddressBookUI.framework */,
 				B5B823A91456941D005E1871 /* AddressBook.framework */,
 				B5B82389145693AF005E1871 /* UIKit.framework */,
@@ -314,6 +331,7 @@
 				0F0F6F5314E46F7900AEBBF3 /* SBJsonWriter.m in Sources */,
 				0F0F6F5414E46F7900AEBBF3 /* SMContactsSelector.m in Sources */,
 				0F0F6F5614E46F7900AEBBF3 /* UIAlertView+UITableView.m in Sources */,
+				1F5B83081801ABB0009D06EF /* CustomIOS7AlertView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
