@@ -33,4 +33,7 @@ This control implements one delegate methods:
 Loop over delegate method to parse each kind of data.
 
  * iOS6 privacy setting ready
- [UPDATED] * Updated to iOS7
+ * Updated to iOS7
+
+
+TODO : Fix landscpae bounds for iOS7 message view.
